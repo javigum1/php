@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Alumnos</title>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="getAlumnos(); getTotalCount()">
+    <header>
+        <h1>Alumnos</h1>
+    </header>
+    <main>
+        <div id="main">
+            <table border="1px solid">
+                <thead>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Apellido 1</th>
+                    <th>Apellido 2</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Localidad</th>
+                    <th>Provincia</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>ACTUALIZAR</th>
+                    <th>ELIMINAR</th>
+                </thead>
+                <tbody>
+                    <!-- El cuerpo lo completa el script -->
+                </tbody>
+            </table>
+            <div id="form">
+                <h2>Actualizar Alumno</h2>
+                <input type="hidden" id="id_alumno">
+                <label for="dni">
+                    DNI:
+                </label>
+                <input type="text" name="dni" id="dni">
+                <label for="apellido1">
+                    Primer apellido:
+                </label>
+                <input type="text" name="apellido1" id="apellido1">
+                <label for="apellido2">
+                    Segundo apellido:
+                </label>
+                <input type="text" name="apellido2" id="apellido2">
+                <label for="nombre">
+                    Nombre:
+                </label>
+                <input type="text" name="nombre" id="nombre">
+                <label for="direccion">
+                    Dirección:
+                </label>
+                <input type="text" name="direccion" id="direccion">
+                <label for="localidad">
+                    Localidad:
+                </label>
+                <input type="text" name="localidad" id="localidad">
+                <label for="provincia">
+                    Provincia:
+                </label>
+                <input type="text" name="provincia" id="provincia">
+                <label for="fecha_nacimiento">
+                    Fecha de Nacimiento:
+                </label>
+                <input type="text" name="fecha_nacimiento" id="fecha_nacimiento">
+
+                <input type="button" onclick="sendForm()" value="Aplicar Cambios">
+            </div>
+            <div id="formInsertar">
+                <h2>Insertar alumno</h2>
+                <label for="dni_insert">
+                    DNI:
+                </label>
+                <input type="text" name="dni_insert" id="dni_insert">
+                <label for="apellido1_insert">
+                    Primer apellido:
+                </label>
+                <input type="text" name="apellido1_insert" id="apellido1_insert">
+                <label for="apellido2_insert">
+                    Segundo apellido:
+                </label>
+                <input type="text" name="apellido2_insert" id="apellido2_insert">
+                <label for="nombre_insert">
+                    Nombre:
+                </label>
+                <input type="text" name="nombre_insert" id="nombre_insert">
+                <label for="direccion_insert">
+                    Dirección:
+                </label>
+                <input type="text" name="direccion_insert" id="direccion_insert">
+                <label for="localidad_insert">
+                    Localidad:
+                </label>
+                <input type="text" name="localidad_insert" id="localidad_insert">
+                <label for="provincia_insert">
+                    Provincia:
+                </label>
+                <input type="text" name="provincia_insert" id="provincia_insert">
+                <label for="fecha_nacimiento_insert">
+                    Fecha de Nacimiento:
+                </label>
+                <input type="text" name="fecha_nacimiento_insert" id="fecha_nacimiento_insert">
+
+                <input type="button" value="Insertar" onclick="sendFormInsert()">
+            </div>
+        </div>
+        <div id="div_num_registros">
+            <label for="num_registros">
+                Núm de Registros: 
+            </label>
+            <input type="text" name="num_registros" id="num_registros" value="10">
+            <input type="button" id="btnCambiarNumRegistros" value="Cambiar" onclick="getAlumnos(); getTotalCount()">
+        </div>
+        <div id="paginador">
+            <input onclick="cambiarPagina(1)" type="button" value="<<" name="paginador_btn_first_page" id="paginador_btn_first_page">
+            <input onclick="cambiarPagina(2)" type="button" value="<" name="paginador_btn_before" id="paginador_btn_before">
+            <input type="text" value="1" name="paginador_num_registros" id="paginador_num_registros">
+            <input onclick="cambiarPagina(3)" type="button" value=">" name="paginador_btn_after" id="paginador_btn_after">
+            <input onclick="cambiarPagina(4)" type="button" value=">>" name="paginador_btn_last_page" id="paginador_btn_last_page">
+            <div id="info_paginador">
+                Cantidad total de registros: <b id="total_registros"></b>
+                Nº de páginas: <b id="nPaginas"></b>
+            </div>
+        </div>
+    </main>
+    <button onclick="displayFormForInsert()">Insertar</button>
+</body>
+</html>
