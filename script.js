@@ -14,7 +14,6 @@ function displayForm(){
  * @param alumno alumno que se desea actualizar
  */
 function setDataIntoForm(alumno){
-    var input_id_alumno = document.getElementById("id_alumno");
     var input_dni = document.getElementById("dni");
     var input_apellido1 = document.getElementById("apellido1");
     var input_apellido2 = document.getElementById("apellido2");
@@ -24,7 +23,6 @@ function setDataIntoForm(alumno){
     var input_provincia = document.getElementById("provincia");
     var input_fecha_nacimiento = document.getElementById("fecha_nacimiento");
 
-    input_id_alumno.value = alumno.id;
     input_dni.value = alumno.dni;
     input_apellido1.value = alumno.apellido1;
     input_apellido2.value = alumno.apellido2;
@@ -207,7 +205,7 @@ function getAlumnos(pagina=1){
 
             // Boton Eliminar y sus atributos
             var link_eliminar = document.createElement("button");
-            link_eliminar.setAttribute('onclick', "eliminarAlumno('" + data.data[i].DNI + "')"); // Usamos DNI como identificador único
+            link_eliminar.setAttribute('onclick', "eliminarAlumno(" + data.data[i].DNI + ")");
             link_eliminar.setAttribute("class", "eliminar");
             link_eliminar.innerHTML = "Eliminar";
 
@@ -236,12 +234,13 @@ function getAlumnos(pagina=1){
  * Solicita al SW eliminar un alumno de la base de datos
  * @param id id del alumno que se desea eliminar 
  */
-function eliminarAlumno(dni){
+function eliminarAlumno(dni) {
     var eliminar = confirm("¿Desea eliminar el alumno?");
-    if(eliminar){
+    console.log("Deleting alumno with DNI: " + dni);
+    if (eliminar) {
         const data = {
             action: 'delete',
-            field: dni
+            field: dni // Aquí se pasa el DNI como el campo 'field'
         }
         fetch(SW, {
             method: "POST",
@@ -251,21 +250,22 @@ function eliminarAlumno(dni){
             body: JSON.stringify(data)
         }).then(
             response => response.json()
-        ).then((response)=>{
+        ).then((response) => {
             console.log(response.data);
             alert("Se ha eliminado el alumno");
             getTotalCount();
             var rows_n = getNumofRows();
+
             var pagina = document.getElementById("paginador_num_registros").value;
             getAlumnos(rows_n * pagina);
-        }).catch((error)=>{
+        }).catch((error) => {
             alert(error);
-        }) 
-    }
-    else{
+        })
+    } else {
         alert("No se ha eliminado el alumno");
     }
 }
+
 
 
 /**
@@ -342,7 +342,14 @@ function displayFormForInsert() {
 /**
  * Envía el formulario al SW para insertar un registro nuevo en la base de datos
  */
+/**
+ * Envía el formulario para insertar un nuevo alumno con depuración adicional
+ */
+/**
+ * Envía el formulario para insertar un nuevo alumno con depuración adicional
+ */
 function sendFormInsert() {
+    // Recoger los valores de los campos de entrada del formulario
     const dni = document.getElementById("dni_insert").value;
     const apellido1 = document.getElementById("apellido1_insert").value;
     const apellido2 = document.getElementById("apellido2_insert").value;
@@ -351,6 +358,14 @@ function sendFormInsert() {
     const localidad = document.getElementById("localidad_insert").value;
     const provincia = document.getElementById("provincia_insert").value;
     const fecha_nacimiento = document.getElementById("fecha_nacimiento_insert").value;
+
+    // Verificar que todos los campos requeridos están llenos
+    if (!dni || !apellido1 || !nombre || !direccion || !localidad || !provincia || !fecha_nacimiento) {
+        alert("Por favor, complete todos los campos requeridos.");
+        return;
+    }
+
+    // Crear el objeto de datos para enviar al servidor
     const data = {
         action: "insert",
         values: {
@@ -363,15 +378,43 @@ function sendFormInsert() {
             provincia: provincia,
             fecha_nacimiento: fecha_nacimiento
         }
-    }
+    };
+
+    console.log("Enviando datos al servidor:", data);  // Log de depuración
+
+    // Enviar los datos al servidor utilizando fetch
     fetch(SW, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
-    }).then(response=>response.json())
-    .then((response)=>{
-        alert("Alumno insertado correctamente");
-    }).catch((error)=>alert(error));
+    })
+    .then(response => {
+        console.log("Respuesta del servidor recibida:", response);  // Log de depuración
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error("Error en la solicitud al servidor");
+        }
+        return response.json();
+    })
+    .then((response) => {
+        console.log("Datos de respuesta del servidor:", response);  // Log de depuración
+        if (!response || !response.data) {
+            throw new Error("La respuesta del servidor no es válida");
+        }
+        if (response.data === "OK") {
+            alert("Alumno insertado correctamente");
+            // Opcionalmente, recargar la lista de alumnos o resetear el formulario
+            loadAlumnos();
+            document.getElementById("formInsertar").reset();
+        } else {
+            alert("Hubo un problema al insertar el alumno: " + response.data);
+        }
+    })
+    .catch((error) => {
+        console.error("Error en la inserción del alumno:", error);  // Log de depuración
+        alert("Hubo un error: " + error.message);
+    });
 }
+

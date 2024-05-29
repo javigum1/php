@@ -25,16 +25,23 @@ switch($data['action']){
         break;
 
     case 'insert':
-        $dni = $data['values']['dni'];
-        $apellido1 = $data['values']['apellido1'];
-        $apellido2 = $data['values']['apellido2'];
-        $nombre = $data['values']['nombre'];
-        $direccion = $data['values']['direccion'];
-        $localidad = $data['values']['localidad'];
-        $provincia = $data['values']['provincia'];
-        $fecha_nacimiento = $data['values']['fecha_nacimiento'];
-        $alumno = new Alumno(null, null, $dni, $apellido1, $apellido2, $nombre, $direccion, $localidad, $provincia, $fecha_nacimiento);
-        $res = $alumno->insert()?"OK":null;
+        $values = $data['values'];
+        $dni = $values['dni'];
+        $apellido1 = $values['apellido1'];
+        $apellido2 = $values['apellido2'];
+        $nombre = $values['nombre'];
+        $direccion = $values['direccion'];
+        $localidad = $values['localidad'];
+        $provincia = $values['provincia'];
+        $fecha_nacimiento = $values['fecha_nacimiento'];
+
+        // Asegúrate de que los datos no están vacíos
+        if ($dni && $apellido1 && $apellido2 && $nombre && $direccion && $localidad && $provincia && $fecha_nacimiento) {
+            $alumno = new Alumno($dni, $apellido1, $apellido2, $nombre, $direccion, $localidad, $provincia, $fecha_nacimiento);
+            $res = $alumno->insert() ? "OK" : null;
+        } else {
+            $res = null;
+        }
         break;
 
     case 'update':
@@ -53,7 +60,7 @@ switch($data['action']){
         break;
 
     case 'delete':
-        $field = $data['field'];
+        $field = $data['value'];
         $datosAlumno = Alumno::getAlumnos(1, null,null,"dni", $field);
         $alumno = new Alumno($datosAlumno[0]);
         $res = $alumno->delete()?"OK":null;

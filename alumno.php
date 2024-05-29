@@ -63,6 +63,7 @@ class Alumno {
            $this->provincia = $provincia;
            $this->fecha_nacimiento = $fecha_nacimiento;
        }
+       echo "Constructor Alumno: dni = " . $this->dni . ", apellido1 = " . $this->apellido1 . ", apellido2 = " . $this->apellido2 . ", nombre = " . $this->nombre . ", direccion = " . $this->direccion . ", localidad = " . $this->localidad . ", provincia = " . $this->provincia . ", fecha_nacimiento = " . $this->fecha_nacimiento . "<br>";
    }
 
     /**
@@ -96,7 +97,7 @@ class Alumno {
     public function insert() {
         try {
             $pdo = PDOConnection::getInstance();
-            $stmt = $pdo->prepare("INSERT INTO alumno(dni, apellido1, apellido2, nombre, direccion, localidad, provincia, fecha_nacimiento)
+            $stmt = $pdo->prepare("INSERT INTO alumno(DNI, APELLIDO_1, APELLIDO_2, NOMBRE, DIRECCION, LOCALIDAD, PROVINCIA, FECHA_NACIMIENTO)
                     VALUES (:dni, :apellido1, :apellido2, :nombre, :direccion, :localidad, :provincia, :fecha_nacimiento)");
             $stmt->bindParam(':dni', $this->dni);
             $stmt->bindParam(':apellido1', $this->apellido1);
@@ -106,12 +107,14 @@ class Alumno {
             $stmt->bindParam(':localidad', $this->localidad);
             $stmt->bindParam(':provincia', $this->provincia);
             $stmt->bindParam(':fecha_nacimiento', $this->fecha_nacimiento);
-            $res = $stmt->execute();
+            return $stmt->execute();
         } catch (PDOException $e) {
+            var_dump($e->getMessage());
             return false;
         }
-        return $res;
     }
+    
+    
 
     /**
      * Actualiza un alumno con los atributos del objeto
@@ -125,7 +128,7 @@ class Alumno {
         localidad=:localidad,
         provincia=:provincia,
         fecha_nacimiento=:fecha_nacimiento
-        WHERE dni = :dni";
+        WHERE id = :id";
         $arrParams = [
             ':dni' => $this->dni,
             ':apellido1' => $this->apellido1,
@@ -135,6 +138,7 @@ class Alumno {
             ':localidad' => $this->localidad,
             ':provincia' => $this->provincia,
             ':fecha_nacimiento' => $this->fecha_nacimiento,
+            ':id' => $this->id
         ];
         try {
             $pdo = PDOConnection::getInstance();
