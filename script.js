@@ -42,6 +42,7 @@ function getNumofRows(){
     return num_registros;
 }
 
+
 /**
  * Elimina todas las filas de la tabla que se le pase
  * @param table tabla que se desea limpiar 
@@ -146,17 +147,19 @@ function sendForm(){
 /**
  * Solicita todos los registros al sw y los muestra en una tabla
  */
-function getAlumnos(pagina=1){
+function getAlumnos(pagina = 1) {
     var row_number = getNumofRows();
-    if(row_number==0){
-        //Valor por defecto
+    if (row_number == 0) {
+        // Valor por defecto
         row_number = 10;
     }
+    
     const data = {
         action: "get",
         num_rows: row_number,
         n_pagina: pagina
-    }
+    };
+    
     fetch(SW, {
         method: "POST",
         headers: {
@@ -168,10 +171,10 @@ function getAlumnos(pagina=1){
     .then(data => {
         var tbody = document.getElementsByTagName("tbody")[0];
         cleanTable(tbody);
-        for (var i = 0; i < data.data.length; i++){
+        for (var i = 0; i < data.data.length; i++) {
             var tr = document.createElement("tr");
 
-            //Creación de los td para los campos de la tabla
+            // Creación de los td para los campos de la tabla
             var td_id = document.createElement("td");
             var td_dni = document.createElement("td");
             var td_apellido1 = document.createElement("td");
@@ -184,8 +187,7 @@ function getAlumnos(pagina=1){
             var td_eliminar = document.createElement("td");
             var td_actualizar = document.createElement("td");
 
-            //Agrega información a la tabla
-            //Agrega información a la tabla
+            // Agrega información a la tabla
             td_id.innerHTML = data.data[i].DNI; // Usamos DNI como identificador único en lugar de id
             td_dni.innerHTML = data.data[i].DNI;
             td_apellido1.innerHTML = data.data[i].APELLIDO_1;
@@ -209,11 +211,10 @@ function getAlumnos(pagina=1){
             link_eliminar.setAttribute("class", "eliminar");
             link_eliminar.innerHTML = "Eliminar";
 
-
             td_actualizar.appendChild(link_actualizar);
             td_eliminar.appendChild(link_eliminar);
 
-            //Agregar tds al tr 
+            // Agregar tds al tr 
             tr.appendChild(td_id);
             tr.appendChild(td_dni);
             tr.appendChild(td_apellido1);
@@ -227,8 +228,10 @@ function getAlumnos(pagina=1){
             tr.appendChild(td_eliminar);
             tbody.appendChild(tr);
         }
-    }).catch(error=>alert(error))
+    })
+    .catch(error => alert(error));
 }
+
 
 /**
  * Solicita al SW eliminar un alumno de la base de datos
@@ -274,34 +277,25 @@ function eliminarAlumno(dni) {
  */
 function cambiarPagina(paginador) {
     var paginaActual = document.getElementById("paginador_num_registros").value;
-    const nPaginas = document.getElementById("nPaginas").value;
+    const nPaginas = document.getElementById("nPaginas").innerHTML;
     const num_registros = document.getElementById("num_registros").value;
-    if(paginador==1){
+    
+    if (paginador == 1) {
         paginaActual = 1;
-        getAlumnos();
-    } else if(paginador==2){
-        if(Number(paginaActual)>1){
-            paginaActual=Number(paginaActual)-1;
-            if(paginaActual==1){
-                getAlumnos();
-            }
-        }
-        getAlumnos((paginaActual-1)*num_registros);
-    } else if(paginador==3){
-        paginaActual=Number(paginaActual)+1;
-        if(Number(nPaginas)<paginaActual){
-            paginaActual--;
-        }
-        getAlumnos((paginaActual-1)*num_registros);
+    } else if (paginador == 2) {
+        paginaActual = Math.max(1, parseInt(paginaActual) - 1);
+    } else if (paginador == 3) {
+        paginaActual = Math.min(parseInt(nPaginas), parseInt(paginaActual) + 1);
     } else {
-        console.log(nPaginas, document.getElementById("nPaginas").value);
-        paginaActual = nPaginas;
-        ultimoRegistro = nPaginas * num_registros;
-        console.log("Ult. "+ultimoRegistro+" "+"Pagina act. "+" "+nPaginas+" "+"numRegistros. "+num_registros);
-        getAlumnos(Number(nPaginas*num_registros));
+        paginaActual = parseInt(nPaginas);
     }
-    document.getElementById("paginador_num_registros").value=paginaActual;
+    
+    const ultimoRegistro = (paginaActual - 1) * num_registros;
+    getAlumnos(ultimoRegistro);
+    
+    document.getElementById("paginador_num_registros").value = paginaActual;
 }
+
 
 /**
  * Inserta en el documento HTML el total de registros de la tabla y el numero de paginas
