@@ -37,13 +37,12 @@ switch($data['action']){
 
         // Asegúrate de que los datos no están vacíos
         if ($dni && $apellido1 && $apellido2 && $nombre && $direccion && $localidad && $provincia && $fecha_nacimiento) {
-            $alumno = new Alumno($dni, $apellido1, $apellido2, $nombre, $direccion, $localidad, $provincia, $fecha_nacimiento);
+            $alumno = new Alumno(['DNI' => $dni, 'APELLIDO_1' => $apellido1, 'APELLIDO_2' => $apellido2, 'NOMBRE' => $nombre, 'DIRECCION' => $direccion, 'LOCALIDAD' => $localidad, 'PROVINCIA' => $provincia, 'FECHA_NACIMIENTO' => $fecha_nacimiento]);
             $res = $alumno->insert() ? "OK" : null;
         } else {
             $res = null;
         }
         break;
-
     case 'update':
         $id = $data['fields_to_update']['id_alumno'];
         $dni = $data['fields_to_update']['dni'];

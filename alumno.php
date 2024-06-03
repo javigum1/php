@@ -43,28 +43,28 @@ class Alumno {
     */
    private $fecha_nacimiento;
 
-   public function __construct($arr = null, $dni = null, $apellido1 = null, $apellido2 = null, $nombre = null, $direccion = null, $localidad = null, $provincia = null, $fecha_nacimiento = null) {
-       if (!is_null($arr)) {
-           $this->dni = $arr['DNI'];
-           $this->apellido1 = $arr['APELLIDO_1'];
-           $this->apellido2 = $arr['APELLIDO_2'];
-           $this->nombre = $arr['NOMBRE'];
-           $this->direccion = $arr['DIRECCION'];
-           $this->localidad = $arr['LOCALIDAD'];
-           $this->provincia = $arr['PROVINCIA'];
-           $this->fecha_nacimiento = $arr['FECHA_NACIMIENTO'];
-       } else {
-           $this->dni = $dni;
-           $this->apellido1 = $apellido1;
-           $this->apellido2 = $apellido2;
-           $this->nombre = $nombre;
-           $this->direccion = $direccion;
-           $this->localidad = $localidad;
-           $this->provincia = $provincia;
-           $this->fecha_nacimiento = $fecha_nacimiento;
-       }
-       echo "Constructor Alumno: dni = " . $this->dni . ", apellido1 = " . $this->apellido1 . ", apellido2 = " . $this->apellido2 . ", nombre = " . $this->nombre . ", direccion = " . $this->direccion . ", localidad = " . $this->localidad . ", provincia = " . $this->provincia . ", fecha_nacimiento = " . $this->fecha_nacimiento . "<br>";
-   }
+    public function __construct($arr = null, $dni = null, $apellido1 = null, $apellido2 = null, $nombre = null, $direccion = null, $localidad = null, $provincia = null, $fecha_nacimiento = null) {
+        if (is_array($arr)) {
+            $this->dni = isset($arr['DNI']) ? $arr['DNI'] : null;
+            $this->apellido1 = isset($arr['APELLIDO_1']) ? $arr['APELLIDO_1'] : null;
+            $this->apellido2 = isset($arr['APELLIDO_2']) ? $arr['APELLIDO_2'] : null;
+            $this->nombre = isset($arr['NOMBRE']) ? $arr['NOMBRE'] : null;
+            $this->direccion = isset($arr['DIRECCION']) ? $arr['DIRECCION'] : null;
+            $this->localidad = isset($arr['LOCALIDAD']) ? $arr['LOCALIDAD'] : null;
+            $this->provincia = isset($arr['PROVINCIA']) ? $arr['PROVINCIA'] : null;
+            $this->fecha_nacimiento = isset($arr['FECHA_NACIMIENTO']) ? $arr['FECHA_NACIMIENTO'] : null;
+        } else {
+            $this->dni = $dni;
+            $this->apellido1 = $apellido1;
+            $this->apellido2 = $apellido2;
+            $this->nombre = $nombre;
+            $this->direccion = $direccion;
+            $this->localidad = $localidad;
+            $this->provincia = $provincia;
+            $this->fecha_nacimiento = $fecha_nacimiento;
+        }
+        echo "Constructor Alumno: dni = " . $this->dni . ", apellido1 = " . $this->apellido1 . ", apellido2 = " . $this->apellido2 . ", nombre = " . $this->nombre . ", direccion = " . $this->direccion . ", localidad = " . $this->localidad . ", provincia = " . $this->provincia . ", fecha_nacimiento = " . $this->fecha_nacimiento . "<br>";
+    } 
 
     /**
      * Devuelve todos los campos de todos los alumnos
