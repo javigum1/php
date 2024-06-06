@@ -150,15 +150,23 @@ class Alumno {
     }
 
     public function delete() {
-        $sql = "DELETE FROM alumno WHERE id=:id";
+        $sql = "DELETE FROM alumno WHERE DNI=:dni"; // Utilizamos DNI en lugar de id
         try {
             $pdo = PDOConnection::getInstance();
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':dni', $this->dni);
             $resultado = $stmt->execute();
+            if ($resultado) {
+                echo "Alumno eliminado correctamente";
+            } else {
+                echo "Error al eliminar el alumno";
+            }
             return $resultado;
         } catch (PDOException $e) {
+            echo "Error en la operación de eliminación: " . $e->getMessage();
             return false;
         }
     }
+    
+    
 }

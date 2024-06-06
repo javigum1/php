@@ -59,10 +59,14 @@ switch($data['action']){
         break;
 
     case 'delete':
-        $field = $data['value'];
-        $datosAlumno = Alumno::getAlumnos(1, null,null,"dni", $field);
-        $alumno = new Alumno($datosAlumno[0]);
-        $res = $alumno->delete()?"OK":null;
+        $field = $data['field']; // Utilizamos el campo 'field' en lugar de 'value'
+        $datosAlumno = Alumno::getAlumnos(1, null,null,"DNI", $field); // Cambiamos 'dni' por 'DNI'
+        if (count($datosAlumno) > 0) {
+            $alumno = new Alumno($datosAlumno[0]);
+            $res = $alumno->delete() ? "OK" : null;
+        } else {
+            $res = null;
+        }
         break;
 }
 
